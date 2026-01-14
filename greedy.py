@@ -1,6 +1,6 @@
-from line_profiler import profile
+
 import copy
-@profile
+
 def update_buffer(buffer):
     for e in buffer[-1]:
         e[0]+=1
@@ -14,14 +14,14 @@ def update_buffer(buffer):
     buffer[0]=[]
     return buffer
 
-@profile
+
 def count_arrivals(a):
     sum = 0
     for i in a:
         sum += len(i)
     return sum
 
-@profile
+
 def find_oldest_message(buffer,fct_calcul_valeur_buffer):
     max = 0
     id_max = 0
@@ -31,14 +31,14 @@ def find_oldest_message(buffer,fct_calcul_valeur_buffer):
             id_max =i
     return id_max
 
-@profile
+
 def count_elems_in_buffer(buffer):
     sum = 0
     for e in buffer:
         sum += len(e)
     return sum
 
-@profile
+
 def brick_1_distinct_packets(arrivals,buffer,fct_calcul_valeur_buffer):
     temps_sortie = 0
     max_delay = 0
@@ -59,7 +59,7 @@ def brick_1_distinct_packets(arrivals,buffer,fct_calcul_valeur_buffer):
         buffer = update_buffer(buffer)
     return max_delay,temps_sortie/nb_messages,sorties
 
-@profile
+
 def min_avg_delay(arrivals,c,B,fct_calcul_valeur_buffer):
     buffer = [ [] for _ in range(c+1)]
     
@@ -70,7 +70,7 @@ def min_avg_delay(arrivals,c,B,fct_calcul_valeur_buffer):
     t= brick_1_distinct_packets(arrivals,buffer,fct_calcul_valeur_buffer)
     return t
 
-@profile
+
 def mrd_buffer(e):
     return (e[0]+e[1][2])/e[1][1]
 def average_delay_buffer(e):

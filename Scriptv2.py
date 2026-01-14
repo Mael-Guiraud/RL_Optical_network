@@ -4,10 +4,10 @@ import numpy as np
 import math
 import copy
 from functools import lru_cache
-from line_profiler import profile
+
 from greedy import min_avg_delay, mrd_buffer
 
-@profile
+ 
 def generate_constrained_binary_matrix(rows, cols, load=0.9):
     """
     Generate a binary matrix with a constrained number of ones per column.
@@ -31,7 +31,7 @@ def generate_constrained_binary_matrix(rows, cols, load=0.9):
     return matrix
 
 
-@profile
+ 
 def get_columns_with_ones(matrix):
     """
     Find the indices of columns that contain at least one '1' in the matrix.
@@ -43,7 +43,7 @@ def get_columns_with_ones(matrix):
     return column_indices
 
 
-@profile
+ 
 def create_actions_values(P, c):
     """
     Create a list of action values for players.
@@ -70,7 +70,7 @@ def generate_arrangement_cached(N, P):
         return tuple(result)
 
 
-@profile
+ 
 def generate_arrangement(N, P):
     """
     Generate arrangements for N elements from P possibilities.
@@ -80,7 +80,7 @@ def generate_arrangement(N, P):
     return [list(x) for x in cached_result]  # Convert tuples to lists
 
 
-@profile
+ 
 def init_profile(matrix, P):
     """
     Initialize the profile for each player based on the binary matrix.
@@ -100,7 +100,7 @@ def init_profile(matrix, P):
     return profile
 
 
-@profile
+ 
 def draw_random_strategy_one_player(player_index, profile):
     """
     Draw a random strategy for one player based on their profile.
@@ -109,7 +109,7 @@ def draw_random_strategy_one_player(player_index, profile):
     return np.random.choice(len(probabilities), p=probabilities)
 
 
-@profile
+ 
 def get_chosen_action(player_index, profile, strategy_index, F, actions, P):
     """
     Get the chosen action for a player based on their strategy.
@@ -123,7 +123,7 @@ def get_chosen_action(player_index, profile, strategy_index, F, actions, P):
     return column_F
 
 
-@profile
+ 
 def add_column_to_matrix(matrix, new_column):
     """
     Add a new column to the existing matrix.
@@ -136,7 +136,7 @@ def add_column_to_matrix(matrix, new_column):
     return new_matrix
 
 
-@profile
+ 
 def compute_fs(S, F, P):
     """
     Compute the Fs matrix based on S and F matrices.
@@ -149,7 +149,7 @@ def compute_fs(S, F, P):
     return Fs
 
 
-@profile
+ 
 def cols_j(S, F, j, P):
     """
     Compute the number of collisions for a given column j.
@@ -164,7 +164,7 @@ def cols_j(S, F, j, P):
     return cols
 
 
-@profile
+ 
 def init_buffer_matrix(P):
     """
     Initialize the buffer matrix for the network.
@@ -173,7 +173,7 @@ def init_buffer_matrix(P):
     return buffer_matrix
 
 
-@profile
+ 
 def update_buffer_matrix(buffer_matrix, period, begin, delay):
     """
     Update the buffer matrix based on the delay and period.
@@ -191,7 +191,7 @@ def update_buffer_matrix(buffer_matrix, period, begin, delay):
         buffer_matrix[first_value:] += 1
         buffer_matrix[:last_value] += 1
 
-@profile
+ 
 def fill_buffer_matrix(buffer_matrix, S, F, P):
     """
     Fill the buffer matrix for all players.
@@ -202,7 +202,7 @@ def fill_buffer_matrix(buffer_matrix, S, F, P):
                 update_buffer_matrix(buffer_matrix, P, j, S[i][j])
 
 
-@profile
+ 
 def buffer_matrix_all_players(S, F, P):
     """
     Create the buffer matrix for all players.
@@ -212,7 +212,7 @@ def buffer_matrix_all_players(S, F, P):
     return buffer_matrix
 
 
-@profile
+ 
 def buffer_matrix_one_player(S, F, P, player_column_index):
     """
     Create the buffer matrix for a single player.
@@ -224,7 +224,7 @@ def buffer_matrix_one_player(S, F, P, player_column_index):
     return buffer_matrix
 
 
-@profile
+ 
 def Ocap_j(S, F, P, player_column_index, B, bm_all, bm_player):
     """
     Compute the overcapacity for a single player.
@@ -240,7 +240,7 @@ def Ocap_j(S, F, P, player_column_index, B, bm_all, bm_player):
     return Ocap
 
 
-@profile
+ 
 def colls_S(S, F, P, player_columns):
     """
     Compute the total number of collisions in the system.
@@ -251,7 +251,7 @@ def colls_S(S, F, P, player_columns):
     return total_collisions
 
 
-@profile
+ 
 def Ocap_S(S, F, P, B, bm_all, bm_players, player_columns):
     """
     Compute the total overcapacity in the system.
@@ -262,7 +262,7 @@ def Ocap_S(S, F, P, B, bm_all, bm_players, player_columns):
     return total_Ocap
 
 
-@profile
+ 
 def max_coll_j(S, F, P, player_columns):
     """
     Find the maximum number of collisions for any player.
@@ -274,7 +274,7 @@ def max_coll_j(S, F, P, player_columns):
     return max_collisions
 
 
-@profile
+ 
 def max_Ocap(S, F, P, B, bm_all, bm_players, player_columns):
     """
     Find the maximum overcapacity for any player.
@@ -286,7 +286,7 @@ def max_Ocap(S, F, P, B, bm_all, bm_players, player_columns):
     return max_ocap
 
 
-@profile
+ 
 def max_ratio_delay(S, taumin):
     """
     Compute the maximum ratio of delay over minimal delay (taumin).
@@ -297,7 +297,7 @@ def max_ratio_delay(S, taumin):
     return maxi
 
 
-@profile
+ 
 def max_ratio_delay_player(F, S, taumin, player_column_index, delay):
     """
     Compute the maximum ratio of delay over minimal delay (taumin) for a single player.
@@ -314,7 +314,7 @@ def max_ratio_delay_player(F, S, taumin, player_column_index, delay):
     return maxi
 
 
-@profile
+ 
 def is_valid(total_collisions, total_Ocap):
     """
     Check if the current configuration is valid (no collisions and no overcapacity).
@@ -322,7 +322,7 @@ def is_valid(total_collisions, total_Ocap):
     return total_collisions == 0 and total_Ocap == 0
 
 
-@profile
+ 
 def maxglob(P, mct, taumin, delay_max):
     """
     Compute the global maximum delay ratio.
@@ -330,7 +330,7 @@ def maxglob(P, mct, taumin, delay_max):
     return (delay_max + P + mct) / max(min(taumin), 1)
 
 
-@profile
+ 
 def maxglob_player(F, P, mct, taumin, player_column_index, delay_max_player):
     """
     Compute the global maximum delay ratio for a single player.
@@ -342,7 +342,7 @@ def maxglob_player(F, P, mct, taumin, player_column_index, delay_max_player):
     return (delay_max_player + P + mct) / mini_taumin
 
 
-@profile
+ 
 def Glob_s(S, F, P, B, taumin, mct, total_collisions, total_Ocap, delay_max):
     """
     Compute the global delay ratio.
@@ -352,7 +352,7 @@ def Glob_s(S, F, P, B, taumin, mct, total_collisions, total_Ocap, delay_max):
     return maxglob(P, mct, taumin, delay_max)
 
 
-@profile
+ 
 def MRS_j(S, F, P, B, taumin, mct, player_column_index, delay, total_collisions, total_Ocap, delay_max):
     """
     Compute the maximum ratio of delay over minimal delay for a single player.
@@ -362,7 +362,7 @@ def MRS_j(S, F, P, B, taumin, mct, player_column_index, delay, total_collisions,
     return maxglob(P, mct, taumin, delay_max)
 
 
-@profile
+ 
 def MRS_j_2(S, F, P, B, taumin, mct, player_column_index, delay, total_collisions, total_Ocap, delay_max_player):
     """
     Alternative computation of the maximum ratio of delay over minimal delay for a single player.
@@ -372,7 +372,7 @@ def MRS_j_2(S, F, P, B, taumin, mct, player_column_index, delay, total_collision
     return maxglob_player(F, P, mct, taumin, player_column_index, delay_max_player)
 
 
-@profile
+ 
 def init_taumin(N, P, mode):
     """
     Initialize the minimal delays (taumin) for each route.
@@ -384,7 +384,7 @@ def init_taumin(N, P, mode):
     return np.random.randint(2 * P, 3 * P, N)
 
 
-@profile
+ 
 def player_cost_3(F, P, taumin, mct, player_column_index, alphac, alphao, glob_S_value, coll_player, ocap_player, max_colls, max_ocap, mrs_player_2, delay_max_player):
     """
     Compute the cost for a single player.
@@ -393,7 +393,7 @@ def player_cost_3(F, P, taumin, mct, player_column_index, alphac, alphao, glob_S
     return 0.5 * a + alphac * (coll_player / max(1, max_colls)) + alphao * (ocap_player / max(1, max_ocap))
 
 
-@profile
+ 
 def compute_utility_opti(pc, cmax, cmin):
     """
     Compute the utility of a player based on their cost.
@@ -401,7 +401,7 @@ def compute_utility_opti(pc, cmax, cmin):
     return (cmax - pc) / max(1, cmax - cmin)
 
 
-@profile
+ 
 def alphas(previous_colls, previous_ocap, total_collisions, total_Ocap):
     """
     Adjust the alpha values based on previous collisions and overcapacities.
@@ -425,7 +425,7 @@ def alphas(previous_colls, previous_ocap, total_collisions, total_Ocap):
     return (max(0.25 - d / 4, 0.1), min(0.25 + d / 4, 0.4))
 
 
-@profile
+ 
 def max_delay(delay):
     """
     Return the maximum delay from the delay matrix.
@@ -433,7 +433,7 @@ def max_delay(delay):
     return np.max(delay)
 
 
-@profile
+ 
 def max_delay_player(F, delay, player_column_index):
     """
     Return the maximum delay for a specific player.
@@ -442,7 +442,7 @@ def max_delay_player(F, delay, player_column_index):
     return max(delays) if delays else 0
 
 
-@profile
+ 
 def avg_delay(S, delay):
     """
     Compute the average delay in the system.
@@ -503,7 +503,7 @@ def get_greedy_strategies_indices(profile, greedy_solution, F, actions, P):
             print(f"Aucune stratégie correspondante trouvée pour le joueur {j}.")
     return greedy_strategies
 
-@profile
+ 
 def run_LRI(P, n, F, taumin, delay, mct, B, b, nb_step):
     """
     Run the Learning Rate Iteration (LRI) algorithm.
