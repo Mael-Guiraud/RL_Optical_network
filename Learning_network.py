@@ -665,7 +665,6 @@ def run_learning_phases_sequential(
     all_players = list(paquets.values())
 
     for phase in range(nb_phases):
-        print(f"--- Phase {phase+1}/{nb_phases} ---")
         played = set()
         if __debug__:
             time.sleep(1)
@@ -845,7 +844,7 @@ def run_all_algos(args):
             sort_list = ["sorted", "uniform"]
         for submode in submode_list:
             for sort in sort_list:
-                print(f"Running meta-algo: {meta_algo}, submode: {submode}, sort: {sort}")
+
                 i, instance, Fs, weight_matrix, nb_routes, period, mct, B, timestamp, nb_levels = args
 
                 start = time.time()
