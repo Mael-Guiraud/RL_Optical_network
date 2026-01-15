@@ -911,7 +911,7 @@ def run_all_algos(args):
 
 
 if __name__ == "__main__":
-    nb_tests = 1
+    nb_tests = 100
     total = nb_tests * 5
     nb_routes = 5
     nb_levels = 2
