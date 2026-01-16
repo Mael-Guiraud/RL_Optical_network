@@ -47,14 +47,6 @@ def _tick_progress():
     with _LOCK:
         _PROGRESS.value += 1
 
-def run_all_algos(args):
-    # ...
-    for meta_algo in ["LRI_SEQUENTIEL","LRI"]:
-        for submode in ["1", "2"]:
-            for sort in ["sorted", "uniform"]:
-                # ... ton code ...
-                # à la fin de chaque combo:
-                _tick_progress()
 
 def generate_instance_and_traffic(nb_routes, nb_levels, period, c):
     instance = None
@@ -467,7 +459,7 @@ def pick_next_player(
 
     elif selection_mode == "sorted":
         valid = state["valid"]
-        mdr = state["mdr"]
+        mdr = state["cost"]
 
         return min(
             remaining_players,
@@ -910,7 +902,7 @@ def run_all_algos(args):
 
 
 
-if __name__ == "__main__":
+def run_simulations():
     nb_tests = 100
     total = nb_tests * 5
     nb_routes = 5
@@ -965,3 +957,45 @@ if __name__ == "__main__":
                 sys.stdout.flush()
 
         print()  # retour à la ligne à la fin
+
+def run_one_instance():
+    start = time.time()
+    nb_routes = 5
+    nb_levels = 2
+    period = 10
+    mct = 2
+    B = 3
+    num_instance = 0
+    mode = "LRI_SEQUENTIEL"
+
+    data = get_instance_from_dataset(nb_routes, nb_levels, period, mct, num_instance)
+    instance, _, Fs, weight_matrix = data[4], data[5], data[6], data[7]
+    start = time.time()
+    poly_value, delays, _ = run_one_network(instance, Fs, weight_matrix, nb_routes, period, mct, B, mode=mode)
+    poly_computation_time = time.time() - start
+    paquets, liens = creer_paquets_depuis_instance(instance, Fs, weight_matrix, period, mct, B, delays, mode=mode)
+    start = time.time()
+    #glob_s,glob_s_min = run_learning_iterations(paquets, liens, period, nb_iterations=10000, alpha=0.001, mode=mode)
+    glob_s,glob_s_min = run_learning_phases_sequential(
+                        paquets, liens, period,
+                        nb_phases=50000//len(paquets),  # 50000/nombre de joueurs
+                        alpha=0.001,
+                        mode="LRI",
+                        submode="1",
+                        selection_mode="sorted"  # "sorted" ou "random"
+                    )
+    RL_computation_time = time.time() - start
+    #Affiche l'intégralité des résultats + plot de glob_s
+    print(f"Poly value: {poly_value}, Poly time: {poly_computation_time:.2f}s")
+    print(f"RL min glob_s: {glob_s_min}, RL time: {RL_computation_time:.2f}s")
+    import matplotlib.pyplot as plt
+    plt.plot(glob_s)
+    plt.xlabel("Itérations")
+    plt.ylabel("glob_s")
+    plt.title("Évolution de glob_s au fil des itérations")
+    plt.grid()
+    plt.savefig("glob_s_plot.png")
+
+if __name__ == "__main__":
+    run_simulations()
+    #run_one_instance()
